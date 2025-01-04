@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -48,6 +47,12 @@ class User extends Authenticatable implements JWTSubject
         'remember_token',
     ];
 
+    protected $primaryKey = 'user_id';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
     /**
      * Get the attributes that should be cast.
      *
@@ -83,9 +88,9 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    // public static function booted() {
-    //     static::creating(function ($model) {
-    //         $model->id = Str::uuid();
-    //     });
-    // }
+    public static function booted() {
+        static::creating(function ($model) {
+            $model->user_id = Str::uuid();
+        });
+    }
 }

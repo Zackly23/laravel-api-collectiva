@@ -14,13 +14,12 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Create a user
         $user = new User();
-        $user->user_id = Str::uuid();
-        $user->name = 'David Dwi Nugroho';
+        $user->name = 'Admin';
         $user->email = 'daviddwinugraha2@gmail.com';
-        $user->password = bcrypt('pass123');
+        $user->password = bcrypt('password123');
         $user->email_verified_at = now();
-
         $user->save();
     }
 }
