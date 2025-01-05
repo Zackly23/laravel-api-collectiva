@@ -28,6 +28,16 @@ class User extends Authenticatable implements JWTSubject
         'password',
     ];
 
+    protected $primaryKey = 'user_id';
+
+    protected $keyType = 'string';
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -84,4 +94,5 @@ class User extends Authenticatable implements JWTSubject
             $model->user_id = Str::uuid();
         });
     }
-}
+ }
+

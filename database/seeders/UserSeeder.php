@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+
         $user = new User();
         $user->first_name = 'David';
         $user->last_name = 'Dwi Nugroho';
