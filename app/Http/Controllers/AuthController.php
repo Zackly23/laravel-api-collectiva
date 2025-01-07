@@ -11,14 +11,15 @@ class AuthController extends Controller
     public function login (Request $request) {
 
         $validator =  Validator::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required'
+            'email' => 'required|email',
+            'password' => 'required|max:10'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 "status" => 401,
-                "message" => $validator->errors(),
+                "message" => "Some Validation Error Detect",
+                "data" => $validator->errors(),
             ], 403);
         }
 
@@ -27,7 +28,7 @@ class AuthController extends Controller
         if (!$token = Auth('api')->attempt($credential)) {
             return response()->json([
                 'status' => 403,
-                'error' => 'Unauthorized'
+                'message' => 'Unauthorized'
             ], 403);
         }
 
@@ -35,6 +36,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => "User Login Succesfully",
             'user'=> $user,
             'token' => $token,
         ]);
