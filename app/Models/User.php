@@ -84,4 +84,21 @@ class User extends Authenticatable implements JWTSubject
             $model->user_id = Str::uuid();
         });
     }
+
+    public function message() {
+        return $this->hasMany(Message::class, 'user_id', 'user_id');
+    }
+
+    public function groupChats()
+    {
+        return $this->belongsToMany(GroupChat::class, 'users_group_chats', 'user_id', 'group_chat_id');
+    }
+
+    public function messageGroupChat() {
+        return $this->hasMany(MessageGroupChat::class, 'user_id', 'sender_id');
+    }
+
+    public function messagePrivateChats() {
+        return $this->hasMany(MessagePrivateChat::class,  'user_id', 'user_id');
+    }
 }
