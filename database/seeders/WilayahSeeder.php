@@ -28,9 +28,9 @@ class WilayahSeeder extends Seeder
         $i = 0;
         // Iterasi setiap baris data
         while (($row = fgetcsv($file)) !== false) {
-            // if ($i > 300) {
-            //     break;
-            // }
+            if ($i > 300) {
+                break;
+            }
             // Masukkan data ke tabel provinsi
             DB::table('provinsis')->updateOrInsert(
                 ['kode_provinsi' => $row[0]],
