@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class MessagePrivateChat extends Model
 {
@@ -24,6 +26,9 @@ class MessagePrivateChat extends Model
             $model->message_private_chat_id = Str::uuid();
 
         });
+
+        Carbon::setLocale('id');
+
     }
     
 
@@ -38,5 +43,14 @@ class MessagePrivateChat extends Model
 
     public function chats() {
         return $this->hasMany(Chat::class, 'chat_id', 'chat_id')->orderBy('created_at', 'desc');
+    }
+
+    protected function dateFormat(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->created_at
+                ? $this->created_at->translatedFormat('D d M Y - H.i')
+                : null
+        );
     }
 }

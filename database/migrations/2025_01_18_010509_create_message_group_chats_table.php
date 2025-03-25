@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('message_group_chats', function (Blueprint $table) {
             $table->uuid('message_group_chat_id')->primary();
-            $table->uuid('sender_id');
-            $table->uuid('group_chat_id');
+            $table->uuid('sender_id')->reference('user_id')->on('users')->onDelete('cascade');;
+            $table->uuid('group_chat_id')->reference('group_chat_is')->on('group_chats')->onDelete('cascade');;
             $table->text('group_chat_text');
             $table->string('media_path')->nullable();            
             $table->timestamps();

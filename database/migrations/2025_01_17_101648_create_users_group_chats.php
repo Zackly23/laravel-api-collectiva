@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users_group_chats', function (Blueprint $table) {
-            $table->uuid('user_id');
-            $table->uuid('group_chat_id');
+            $table->uuid('user_id')->reference('user_id')->on('users')->onDelete('cascade');;
+            $table->uuid('group_chat_id')->reference('group_chat_id')->on('group_chats')->onDelete('cascade');;
             $table->timestamps();
         });
     }

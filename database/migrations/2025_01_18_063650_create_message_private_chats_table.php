@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('message_private_chats', function (Blueprint $table) {
             $table->uuid('message_private_chat_id')->primary();
-            $table->uuid('user_id');
-            $table->uuid('sender_id');
+            $table->uuid('user_id')->reference('user_id')->on('users')->onDelete('cascade');;
+            $table->uuid('sender_id')->reference('user_id')->on('users')->onDelete('cascade');;
             $table->text('private_chat_text');
             $table->string('media_path')->nullable();  
             $table->timestamps();

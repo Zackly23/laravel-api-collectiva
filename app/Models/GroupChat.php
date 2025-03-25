@@ -4,9 +4,15 @@ namespace App\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class GroupChat extends Model
+
 {
+    use HasUuids;
+
+    protected $guarded = ['group_chat_id'];
+
     protected $primaryKey = 'group_chat_id';
 
     protected $keyType = 'string';
@@ -17,6 +23,7 @@ class GroupChat extends Model
         static::creating(function ($model) {
             $model->group_chat_id = Str::uuid();
         });
+
     }
 
     public function users()
@@ -26,5 +33,9 @@ class GroupChat extends Model
 
     public function messageGroupChat() {
         return $this->hasMany(MessageGroupChat::class, 'group_chat_id', 'group_chat_id');
+    }
+
+    public function project() {
+        return $this->hasOne(Project::class, 'project_id', 'project_id');
     }
 }

@@ -12,11 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('agendas', function (Blueprint $table) {
-            $table->uuid('agenda_uuid');
-            $table->string('date');
-            $table->string('description');
-            $table->boolean('is_completed');
-            $table->string('color');
+            $table->uuid('agenda_id')->primary();
+            $table->uuid('user_id')->reference('user_id')->on('users')->onDelete('cascade');
+            $table->date('tanggal_agenda');
+            $table->string('waktu_agenda')->nullable();
+            $table->string('description')->nullable();
+            $table->boolean('is_completed')->default(false);
+            $table->string('category');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

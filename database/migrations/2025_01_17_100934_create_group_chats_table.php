@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('group_chats', function (Blueprint $table) {
-            $table->uuid('group_chat_id');
+            $table->uuid('group_chat_id')->primary();
             $table->string('group_chat_name');
-            $table->uuid('initiator_user_id');
-            $table->uuid('project_id');
+            $table->uuid('initiator_user_id')->reference('user_id')->on('users')->onDelete('cascade');
+            $table->uuid('project_id')->reference('project_id')->on('projects')->onDelete('cascade');;
+            $table->string('group_avatar')->nullable();
             $table->timestamps();
         });
     }
