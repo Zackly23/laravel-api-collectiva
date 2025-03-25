@@ -2,27 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreRegistrationRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+
 
 class RegistrationController extends Controller
 {
-    public function signup (Request $request) {
-        
-        try{
-            $validator = Validator::make($request->all(), [
-                'first_name' => 'required|string|max:50', // Nama depan wajib diisi, string, dan max 50 karakter
-                'last_name' => 'required|string|max:50', // Nama belakang opsional, string, dan max 50 karakter
-                'email' => 'required|email|unique:users,email', // Email wajib, valid, unik di tabel users
-                'password' => 'required|string', // Password wajib, minimal 8 karakter, dan dikonfirmasi
+
+
+
+    public function signup (StoreRegistrationRequest $request) {
+
+        try {
+            $validatedData = $request->validated();
+
+            $validatedData['full_name'] = $validatedData['first_name'] . ' ' . $validatedData['last_name'];
+            $validatedData['social_media'] = json_encode([
+                'facebook' => '',
+                'twitter'  => '',
+                'instagram'=> '',
+                'linkedin' => '',
+                'github'   => '',
+                'medium'   => '',
             ]);
-            User::create($validator->validated());
+            $validatedData['profile_picture'] = 'profile/user-default.png'; // Sesuaikan path gambar default
 
-            return response()->json(['message' => 'User created successfully'], 201);
+            $user = User::create($validatedData);
 
-        } catch (\Exception $e) {
-            return response()->json(['message' => $e->getMessage()], 422);
+            $user->sendEmailVerificationNotification();
+
+            $user->increment('total_points', 10);
+
+            $user['badge'] = $user->getBadge()->value;
+
+            $user->assignRole('active');
+
+            if ($user) {
+                return response()->json([
+                    'message' => 'Registration successful!',
+                    'user' => $user
+                ], 201);
+            }
+
+        } catch (ValidationException $e) {
+            return response()->json([
+                'message' => 'Validation failed.',
+                'errors' => $e->errors(), // Pesan error dikembalikan dalam bentuk array
+            ], 422);
         }
+       
     }
 }

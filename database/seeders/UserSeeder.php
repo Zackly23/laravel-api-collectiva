@@ -13,13 +13,42 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $jenisKelamin = ['laki-laki', 'perempuan'];
+        $users = [
+            [
+                'first_name' => 'David',
+                'last_name'  => 'Dwi Nugroho',
+                'email'      => 'daviddwinugraha2@gmail.com',
+            ],
+        ];
 
-        $user = new User();
-        $user->first_name = 'David';
-        $user->last_name = 'Dwi Nugroho';
-        $user->email = 'daviddwinugraha2@gmail.com';
-        $user->password = bcrypt('password123');
-        $user->email_verified_at = now();
-        $user->save();
+        foreach ($users as $userData) {
+            User::create([
+                'first_name'       => $userData['first_name'],
+                'last_name'        => $userData['last_name'],
+                // Jika Anda ingin menggunakan computed full_name, Anda bisa menggabungkannya
+                'full_name'        => $userData['first_name'] . ' ' . $userData['last_name'],
+                'jenis_kelamin'    => $jenisKelamin[0],
+                'profile_picture'  => null, // Kosongkan atau isi sesuai kebutuhan
+                'email'            => $userData['email'],
+                'password'         => bcrypt('password123'),
+                'email_verified_at'=> now(),
+
+                // Kolom tambahan pada tabel users
+                'address'          => '', // Berikan nilai default (misalnya, kosong)
+                'social_media'     => json_encode([
+                    'facebook' => '',
+                    'twitter'  => '',
+                    'instagram'=> '',
+                    'linkedin' => '',
+                    'github'   => '',
+                    'medium'   => '',
+                ]), // Mengisi dengan JSON kosong
+                'phone_number'     => '', // Default kosong
+                'nik'              => '', // Default kosong
+                'birth_date'       => null, // Nilai null jika belum diketahui
+                'job'              => '', // Default kosong
+            ]);
+        }
     }
 }
